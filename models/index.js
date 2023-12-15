@@ -22,7 +22,7 @@ export const getContactById = async (id) => {
 
 export const removeContact = async (id) => {
   // Повертає об'єкт видаленого контакту. Повертає null, якщо контакт з таким id не знайдений.
-  const contacts = await getAllContacts();
+  const contacts = await listContacts();
   const index = contacts.findIndex((item) => item.id === id);
   if (index === -1) {
     return null;
@@ -34,7 +34,7 @@ export const removeContact = async (id) => {
 
 export const addContact = async (data) => {
   // Повертає об'єкт доданого контакту.
-  const contacts = await getAllContacts();
+  const contacts = await listContacts();
   const newContact = {
     id: nanoid(),
     ...data,
@@ -45,7 +45,7 @@ export const addContact = async (data) => {
 };
 
 export const updateContactById = async (id, data) => {
-  const contacts = await getAllContacts();
+  const contacts = await listContacts();
   const index = contacts.findIndex((item) => item.id === id);
   if (index === -1) {
     return null;
