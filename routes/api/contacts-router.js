@@ -15,22 +15,22 @@ const contactsRouter = express.Router();
 
 contactsRouter.get("/", contactsController.getAll);
 
-contactsRouter.get("/:id", contactsController.getById);
+// contactsRouter.get("/:id", contactsController.getById);
 
-contactsRouter.post(
-  "/",
-  isEmptyBody,
-  validateBody(contactAddSchema),
-  contactsController.add,
-);
+// contactsRouter.post(
+//   "/",
+//   isEmptyBody,
+//   validateBody(contactAddSchema),
+//   contactsController.add,
+// );
 
-contactsRouter.put(
-  "/:id",
-  isEmptyBody,
-  validateBody(contactUpdateSchema),
-  contactsController.updateById,
-);
+// contactsRouter.put(
+//   "/:id",
+//   isEmptyBody,
+//   validateBody(contactUpdateSchema),
+//   contactsController.updateById,
+// );
 
-contactsRouter.delete("/:id", contactsController.deleteById);
+// contactsRouter.delete("/:id", contactsController.deleteById);
 
 export default contactsRouter;
