@@ -17,12 +17,12 @@ contactsRouter.get("/", contactsController.getAll);
 
 // contactsRouter.get("/:id", contactsController.getById);
 
-// contactsRouter.post(
-//   "/",
-//   isEmptyBody,
-//   validateBody(contactAddSchema),
-//   contactsController.add,
-// );
+contactsRouter.post(
+  "/",
+  isEmptyBody,
+  // validateBody(contactAddSchema),
+  contactsController.add,
+);
 
 // contactsRouter.put(
 //   "/:id",
