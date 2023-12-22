@@ -9,12 +9,6 @@ const contactSchema = new Schema(
     name: {
       type: String,
       required: [true, "Set name for contact"],
-      // validate: {
-      //   validator: function (value) {
-      //     return typeof value === "string" && isNaN(value);
-      //   },
-      //   message: "Name must be a string",
-      // },
     },
     email: {
       type: String,
