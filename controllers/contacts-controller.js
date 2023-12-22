@@ -42,14 +42,17 @@ const add = async (req, res) => {
   res.status(201).json(result);
 };
 
-// const updateById = async (req, res) => {
-//   const { id } = req.params;
-//   const result = await contactsService.updateContactById(id, req.body);
-//   if (!result) {
-//     throw HttpError(404, `Not found`);
-//   }
-//   res.json(result);
-// };
+const updateById = async (req, res) => {
+  const { id } = req.params;
+  const result = await Contact.findByIdAndUpdate(id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+  if (!result) {
+    throw HttpError(404, `Not found`);
+  }
+  res.json(result);
+};
 
 // const deleteById = async (req, res) => {
 //   const { id } = req.params;
@@ -68,6 +71,6 @@ export default {
   getAll: ctrlWrapper(getAll),
   getById: ctrlWrapper(getById),
   add: ctrlWrapper(add),
-  // updateById: ctrlWrapper(updateById),
+  updateById: ctrlWrapper(updateById),
   // deleteById: ctrlWrapper(deleteById),
 };

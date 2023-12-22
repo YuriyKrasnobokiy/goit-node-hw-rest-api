@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-import { handleSaveError } from "./hooks.js";
+import { handleSaveError, addUpdateSettings } from "./hooks.js";
 
 import Joi from "joi";
 
@@ -9,6 +9,12 @@ const contactSchema = new Schema(
     name: {
       type: String,
       required: [true, "Set name for contact"],
+      // validate: {
+      //   validator: function (value) {
+      //     return typeof value === "string" && isNaN(value);
+      //   },
+      //   message: "Name must be a string",
+      // },
     },
     email: {
       type: String,
@@ -26,6 +32,10 @@ const contactSchema = new Schema(
 
 // Якщо потрібно встановити код помилки
 contactSchema.post("save", handleSaveError);
+
+contactSchema.pre("findOneAndUpdate", addUpdateSettings);
+
+contactSchema.post("findOneAndUpdate", handleSaveError);
 
 const requiredMessage = (field) => `missing required ${field} field`;
 
@@ -58,6 +68,10 @@ export const contactUpdateSchema = Joi.object({
   email: Joi.string(),
   phone: Joi.string(),
   favorite: Joi.boolean(),
+});
+
+export const contactUpdateFAvoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
 });
 
 const Contact = model("contact", contactSchema);
