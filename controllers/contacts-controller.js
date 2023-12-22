@@ -4,9 +4,9 @@ import Contact from "../models/Contact.js";
 
 import { HttpError } from "../helpers/index.js";
 
-import { contactAddSchema } from "../schemas/contact-schemas.js";
+import { contactAddSchema } from "../models/Contact.js";
 
-import { contactUpdateSchema } from "../schemas/contact-schemas.js";
+import { contactUpdateSchema } from "../models/Contact.js";
 
 import { ctrlWrapper } from "../decorators/index.js";
 
