@@ -13,19 +13,29 @@ import { ctrlWrapper } from "../decorators/index.js";
 const getAll = async (req, res) => {
   const result = await Contact.find();
 
+  // щоб отримати певні поля
+  // const result = await Contact.find({}, "phone name");
+
+  // щоб отримати без певних полів
+  // const result = await Contact.find({}, "-phone -favorite");
+
   res.json(result);
 };
 
-// const getById = async (req, res) => {
-//   const { id } = req.params;
+const getById = async (req, res) => {
+  const { id } = req.params;
 
-//   const result = await contactsService.getContactById(id);
+  // const result = await Contact.findOne({ _id: id });
 
-//   if (!result) {
-//     throw HttpError(404, `Not found`);
-//   }
-//   res.json(result);
-// };
+  //або
+
+  const result = await Contact.findById(id);
+
+  if (!result) {
+    throw HttpError(404, `Not found`);
+  }
+  res.json(result);
+};
 
 const add = async (req, res) => {
   const result = await Contact.create(req.body);
@@ -56,7 +66,7 @@ const add = async (req, res) => {
 
 export default {
   getAll: ctrlWrapper(getAll),
-  // getById: ctrlWrapper(getById),
+  getById: ctrlWrapper(getById),
   add: ctrlWrapper(add),
   // updateById: ctrlWrapper(updateById),
   // deleteById: ctrlWrapper(deleteById),
