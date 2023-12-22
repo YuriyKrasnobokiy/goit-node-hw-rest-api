@@ -54,23 +54,23 @@ const updateById = async (req, res) => {
   res.json(result);
 };
 
-// const deleteById = async (req, res) => {
-//   const { id } = req.params;
-//   const result = await contactsService.removeContact(id);
-//   if (!result) {
-//     throw HttpError(404, `Not found`);
-//   }
-//   res.json({
-//     message: "Contact deleted",
-//   });
-//   // якщо потрібно передати 204 статус (немає контенту)
-//   // res.status(204).send();
-// };
+const deleteById = async (req, res) => {
+  const { id } = req.params;
+  const result = await Contact.findByIdAndDelete(id);
+  if (!result) {
+    throw HttpError(404, `Not found`);
+  }
+  res.json({
+    message: "Contact deleted",
+  });
+  // якщо потрібно передати 204 статус (немає контенту)
+  // res.status(204).send();
+};
 
 export default {
   getAll: ctrlWrapper(getAll),
   getById: ctrlWrapper(getById),
   add: ctrlWrapper(add),
   updateById: ctrlWrapper(updateById),
-  // deleteById: ctrlWrapper(deleteById),
+  deleteById: ctrlWrapper(deleteById),
 };

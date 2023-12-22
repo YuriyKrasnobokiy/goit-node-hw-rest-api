@@ -9,7 +9,7 @@ import { validateBody } from "../../decorators/index.js";
 import {
   contactAddSchema,
   contactUpdateSchema,
-  contactUpdateFAvoriteSchema,
+  contactUpdateFavoriteSchema,
 } from "../../models/Contact.js";
 
 const contactsRouter = express.Router();
@@ -37,10 +37,10 @@ contactsRouter.patch(
   "/:id/favorite",
   isValidId,
   isEmptyBody,
-  validateBody(contactUpdateFAvoriteSchema),
+  validateBody(contactUpdateFavoriteSchema),
   contactsController.updateById,
 );
 
-// contactsRouter.delete("/:id", isValidId, contactsController.deleteById);
+contactsRouter.delete("/:id", isValidId, contactsController.deleteById);
 
 export default contactsRouter;
