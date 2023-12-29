@@ -37,6 +37,7 @@ userSchema.pre("findOneAndUpdate", addUpdateSettings);
 
 userSchema.post("findOneAndUpdate", handleSaveError);
 
+//////REGISTER///////
 export const userSignupSchema = Joi.object({
   email: Joi.string().required(),
   //для використання регулярного виразу
@@ -44,11 +45,12 @@ export const userSignupSchema = Joi.object({
   password: Joi.string().required(),
   //для того щоб задати максимальну кількість символів
   // password: Joi.string().min(6).required(),
-  // subscription: Joi.string()
-  //   .valid("starter", "pro", "business")
-  //   .default("starter"),
+  subscription: Joi.string()
+    .valid("starter", "pro", "business")
+    .default("starter"),
 });
 
+//////LOGIN///////
 export const userSigninSchema = Joi.object({
   email: Joi.string().required(),
   password: Joi.string().required(),

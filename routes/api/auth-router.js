@@ -10,6 +10,7 @@ import { userSignupSchema, userSigninSchema } from "../../models/User.js";
 
 const authRouter = express.Router();
 
+//////REGISTER///////
 authRouter.post(
   // "/signup",
   "/register",
@@ -18,6 +19,7 @@ authRouter.post(
   authController.signup,
 );
 
+//////LOGIN///////
 authRouter.post(
   // "/signin",
   "/login",
