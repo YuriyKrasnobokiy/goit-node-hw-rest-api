@@ -11,10 +11,19 @@ import { userSignupSchema, userSigninSchema } from "../../models/User.js";
 const authRouter = express.Router();
 
 authRouter.post(
+  // "/signup",
   "/register",
   isEmptyBody,
   validateBody(userSignupSchema),
   authController.signup,
+);
+
+authRouter.post(
+  // "/signin",
+  "/login",
+  isEmptyBody,
+  validateBody(userSigninSchema),
+  authController.signin,
 );
 
 export default authRouter;
