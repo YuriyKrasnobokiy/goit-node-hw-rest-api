@@ -7,7 +7,8 @@ import { HttpError } from "../helpers/index.js";
 import { ctrlWrapper } from "../decorators/index.js";
 
 const getAll = async (req, res) => {
-  const result = await Contact.find();
+  const { _id: owner } = req.user;
+  const result = await Contact.find({ owner });
 
   // щоб отримати певні поля
   // const result = await Contact.find({}, "phone name");
@@ -19,13 +20,14 @@ const getAll = async (req, res) => {
 };
 
 const getById = async (req, res) => {
-  const { id } = req.params;
+  const { id: _id } = req.params;
+  const { _id: owner } = req.user;
 
-  // const result = await Contact.findOne({ _id: id });
+  const result = await Contact.findOne({ _id, owner });
 
-  //або
+  //або без перевірки власника
 
-  const result = await Contact.findById(id);
+  // const result = await Contact.findById(id);
 
   if (!result) {
     throw HttpError(404, `Not found`);
@@ -34,13 +36,15 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const result = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 
 const updateById = async (req, res) => {
-  const { id } = req.params;
-  const result = await Contact.findByIdAndUpdate(id, req.body, {
+  const { id: _id } = req.params;
+  const { _id: owner } = req.user;
+  const result = await Contact.findOneAndUpdate({ _id, owner }, req.body, {
     new: true,
     runValidators: true,
   });
@@ -62,8 +66,9 @@ const updateStatusContact = async (req, res) => {
 };
 
 const deleteById = async (req, res) => {
-  const { id } = req.params;
-  const result = await Contact.findByIdAndDelete(id);
+  const { id: _id } = req.params;
+  const { _id: owner } = req.user;
+  const result = await Contact.findOneAndDelete({ _id, owner });
   if (!result) {
     throw HttpError(404, `Not found`);
   }
