@@ -2,7 +2,11 @@ import express from "express";
 
 import authController from "../../controllers/auth-controller.js";
 
-import { isEmptyBody, isValidId } from "../../middlewares/index.js";
+import {
+  authenticate,
+  isEmptyBody,
+  isValidId,
+} from "../../middlewares/index.js";
 
 import { validateBody } from "../../decorators/index.js";
 
@@ -27,5 +31,12 @@ authRouter.post(
   validateBody(userSigninSchema),
   authController.signin,
 );
+
+////CURRENT////
+authRouter.get("/current", authenticate, authController.getCurrent);
+
+///LOGOUT///
+// authRouter.post("/signout", authenticate, authController.signout)
+authRouter.post("/logout", authenticate, authController.signout);
 
 export default authRouter;
