@@ -10,7 +10,11 @@ import {
 
 import { validateBody } from "../../decorators/index.js";
 
-import { userSignupSchema, userSigninSchema } from "../../models/User.js";
+import {
+  userSignupSchema,
+  userSigninSchema,
+  userUpdateSubscription,
+} from "../../models/User.js";
 
 const authRouter = express.Router();
 
@@ -38,5 +42,13 @@ authRouter.get("/current", authenticate, authController.getCurrent);
 ///LOGOUT///
 // authRouter.post("/signout", authenticate, authController.signout)
 authRouter.post("/logout", authenticate, authController.signout);
+
+////UPDATING SUBSCRIPTION////
+authRouter.patch(
+  "/subscription",
+  authenticate,
+  validateBody(userUpdateSubscription),
+  authController.subscrUpdate,
+);
 
 export default authRouter;

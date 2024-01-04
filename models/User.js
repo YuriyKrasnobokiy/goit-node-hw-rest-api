@@ -58,6 +58,14 @@ export const userSigninSchema = Joi.object({
   password: Joi.string().required(),
 });
 
+//SUBSCRIPTION UPDATING//
+export const userUpdateSubscription = Joi.object({
+  subscription: Joi.string()
+    .valid(...["starter", "pro", "business"])
+    .required()
+    .messages({ "any.required": "missing field subscription" }),
+});
+
 const User = model("user", userSchema);
 
 export default User;
