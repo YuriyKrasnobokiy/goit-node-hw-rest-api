@@ -4,32 +4,45 @@ import Contact from "../models/Contact.js";
 
 import { HttpError } from "../helpers/index.js";
 
-import { contactAddSchema } from "../models/Contact.js";
-
-import { contactUpdateSchema } from "../models/Contact.js";
-
 import { ctrlWrapper } from "../decorators/index.js";
 
 const getAll = async (req, res) => {
-  const result = await Contact.find();
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 10, favorite } = req.query;
+  const skip = (page - 1) * limit;
+  const result = await Contact.find(
+    favorite ? { owner, favorite } : { owner },
+    "-createdAt -updatedAt",
+    {
+      skip,
+      limit,
+    },
+  );
 
-  // щоб отримати певні поля
+  //!!! метод populate щоб повернути не id власника, а об'єкт власника з id та усією інфою populate("owner") або конкретне поле
+  // const result = await Contact.find({ owner }, "-createdAt -updatedAt", {
+  //   skip,
+  //   limit,
+  // }).populate("owner", "email");
+
+  //!!! щоб отримати певні поля
   // const result = await Contact.find({}, "phone name");
 
-  // щоб отримати без певних полів
+  //!!! щоб отримати без певних полів
   // const result = await Contact.find({}, "-phone -favorite");
 
   res.json(result);
 };
 
 const getById = async (req, res) => {
-  const { id } = req.params;
+  const { id: _id } = req.params;
+  const { _id: owner } = req.user;
 
-  // const result = await Contact.findOne({ _id: id });
+  const result = await Contact.findOne({ _id, owner });
 
-  //або
+  //або без перевірки власника
 
-  const result = await Contact.findById(id);
+  // const result = await Contact.findById(id);
 
   if (!result) {
     throw HttpError(404, `Not found`);
@@ -38,13 +51,15 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const result = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 
 const updateById = async (req, res) => {
-  const { id } = req.params;
-  const result = await Contact.findByIdAndUpdate(id, req.body, {
+  const { id: _id } = req.params;
+  const { _id: owner } = req.user;
+  const result = await Contact.findOneAndUpdate({ _id, owner }, req.body, {
     new: true,
     runValidators: true,
   });
@@ -55,8 +70,9 @@ const updateById = async (req, res) => {
 };
 
 const updateStatusContact = async (req, res) => {
-  const { id } = req.params;
-  const result = await Contact.findByIdAndUpdate(id, req.body, {
+  const { id: _id } = req.params;
+  const { _id: owner } = req.user;
+  const result = await Contact.findOneAndUpdate({ _id, owner }, req.body, {
     new: true,
   });
   if (!result) {
@@ -66,8 +82,9 @@ const updateStatusContact = async (req, res) => {
 };
 
 const deleteById = async (req, res) => {
-  const { id } = req.params;
-  const result = await Contact.findByIdAndDelete(id);
+  const { id: _id } = req.params;
+  const { _id: owner } = req.user;
+  const result = await Contact.findOneAndDelete({ _id, owner });
   if (!result) {
     throw HttpError(404, `Not found`);
   }

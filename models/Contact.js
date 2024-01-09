@@ -20,6 +20,10 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
   },
   { versionKey: false },
 );
@@ -49,19 +53,12 @@ export const contactAddSchema = Joi.object({
     .messages({
       "any.required": requiredMessage("phone"),
     }),
-  favorite: Joi.boolean()
-    .default(false)
-    .required()
-    .messages({
-      "any.required": requiredMessage("favorite"),
-    }),
 });
 
 export const contactUpdateSchema = Joi.object({
   name: Joi.string(),
   email: Joi.string(),
   phone: Joi.string(),
-  favorite: Joi.boolean(),
 });
 
 export const contactUpdateFavoriteSchema = Joi.object({
