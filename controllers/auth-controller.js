@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
+import fs from "fs/promises";
 import { HttpError } from "../helpers/index.js";
 import { ctrlWrapper } from "../decorators/index.js";
 import jwt from "jsonwebtoken";
@@ -11,22 +12,24 @@ const { JWT_SECRET } = process.env;
 
 //////REGISTER///////
 const signup = async (req, res) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email });
-  if (user) {
-    throw HttpError(409, "Email in use");
-  }
+  // const { email, password } = req.body;
+  console.log(req.body);
+  console.log(req.file);
+  // const user = await User.findOne({ email });
+  // if (user) {
+  //   throw HttpError(409, "Email in use");
+  // }
 
-  const hashPassword = await bcrypt.hash(password, 10);
+  // const hashPassword = await bcrypt.hash(password, 10);
 
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  // const newUser = await User.create({ ...req.body, password: hashPassword });
 
-  res.json({
-    user: {
-      email: newUser.email,
-      subscription: newUser.subscription,
-    },
-  });
+  // res.json({
+  //   user: {
+  //     email: newUser.email,
+  //     subscription: newUser.subscription,
+  //   },
+  // });
 };
 
 //////LOGIN///////
