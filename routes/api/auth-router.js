@@ -23,7 +23,7 @@ const authRouter = express.Router();
 authRouter.post(
   // "/signup",
   "/register",
-  upload.single("avatar"),
+  // upload.single("avatar"),
   //якщо приходить декілька файлів - метод array та к-ть файлів
   //upload.array("avatar", 8)
   //якщо в декількох полях приходять файли - fields
@@ -55,6 +55,14 @@ authRouter.patch(
   authenticate,
   validateBody(userUpdateSubscription),
   authController.subscrUpdate,
+);
+
+//UPDATE AVATAR//
+authRouter.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+  authController.updateAvatar,
 );
 
 export default authRouter;

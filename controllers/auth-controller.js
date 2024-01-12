@@ -6,6 +6,8 @@ import path from "path";
 import { HttpError } from "../helpers/index.js";
 import { ctrlWrapper } from "../decorators/index.js";
 import jwt from "jsonwebtoken";
+import gravatar from "gravatar";
+import Jimp from "jimp";
 
 dotenv.config();
 
@@ -17,14 +19,6 @@ const avatarsPath = path.resolve("public", "avatars");
 const signup = async (req, res) => {
   const { email, password } = req.body;
 
-  const { path: oldPath, filename } = req.file;
-
-  const newPath = path.join(avatarsPath, filename);
-
-  await fs.rename(oldPath, newPath);
-
-  const avatar = path.join("avatars", filename);
-
   const user = await User.findOne({ email });
 
   if (user) {
@@ -33,17 +27,18 @@ const signup = async (req, res) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
 
+  const avaURL = gravatar.url(email);
+
   const newUser = await User.create({
     ...req.body,
-    avatarURL: avatar,
     password: hashPassword,
+    avatarURL: avaURL,
   });
 
   res.json({
     user: {
       email: newUser.email,
       subscription: newUser.subscription,
-      avatarURL: avatar,
     },
   });
 };
@@ -112,10 +107,43 @@ const subscrUpdate = async (req, res) => {
   res.json(result);
 };
 
+//updating avatar//
+
+const updateAvatar = async (req, res) => {
+  const { _id } = req.user;
+
+  const { path: oldPath, filename } = req.file;
+
+  const newPath = path.join(avatarsPath, filename);
+
+  await fs.rename(oldPath, newPath);
+
+  //////change width and hight for image
+
+  Jimp.read(newPath)
+    .then((img) => {
+      return img
+        .resize(250, 250) // resize
+        .write(newPath); // save
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+
+  ////
+
+  const avatarURL = path.join("avatars", filename);
+
+  await User.findByIdAndUpdate(_id, { avatarURL });
+
+  res.json({ avatarURL });
+};
+
 export default {
   signup: ctrlWrapper(signup),
   signin: ctrlWrapper(signin),
   getCurrent: ctrlWrapper(getCurrent),
   signout: ctrlWrapper(signout),
   subscrUpdate: ctrlWrapper(subscrUpdate),
+  updateAvatar: ctrlWrapper(updateAvatar),
 };
