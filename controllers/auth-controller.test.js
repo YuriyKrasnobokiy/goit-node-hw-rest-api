@@ -16,14 +16,6 @@ describe("login", () => {
       });
   });
 
-  afterAll(() => {
-    mongoose.connection
-      .close()
-      .then(server.close())
-      .catch((error) => {
-        console.log(error.message);
-      });
-  });
   test("login", async () => {
     const LoginedUser = {
       email: "user666@mail.com",
@@ -37,5 +29,14 @@ describe("login", () => {
     expect(
       typeof response.body.user.email && typeof response.body.user.subscription,
     ).toBe("string");
+  });
+
+  afterAll(() => {
+    mongoose.connection
+      .close()
+      .then(server.close())
+      .catch((error) => {
+        console.log(error.message);
+      });
   });
 });
