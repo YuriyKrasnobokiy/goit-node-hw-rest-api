@@ -6,6 +6,7 @@ import {
   authenticate,
   isEmptyBody,
   isValidId,
+  upload,
 } from "../../middlewares/index.js";
 
 import { validateBody } from "../../decorators/index.js";
@@ -22,6 +23,11 @@ const authRouter = express.Router();
 authRouter.post(
   // "/signup",
   "/register",
+  // upload.single("avatar"),
+  //якщо приходить декілька файлів - метод array та к-ть файлів
+  //upload.array("avatar", 8)
+  //якщо в декількох полях приходять файли - fields
+  //upload.fields([{name: "avatar", maxCount: 8}])
   isEmptyBody,
   validateBody(userSignupSchema),
   authController.signup,
@@ -49,6 +55,14 @@ authRouter.patch(
   authenticate,
   validateBody(userUpdateSubscription),
   authController.subscrUpdate,
+);
+
+//UPDATE AVATAR//
+authRouter.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+  authController.updateAvatar,
 );
 
 export default authRouter;
